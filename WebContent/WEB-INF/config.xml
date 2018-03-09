@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+	<mvc:annotation-driven/>
+	<mvc:default-servlet-handler/>
+	
+	<!-- 어노테이션 (controller/service) 자동 등록 -->
+	<context:component-scan base-package="total.controller"/>
+	<context:component-scan base-package="total.service"/>
+	<!-- InternalResourceViewResolver로 경로 단순화 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/view/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+	
+	<!-- DB연동 -->
+	<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" id="ds">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url" value="jdbc:oracle:thin:@study.c9j7oidifzwv.ap-northeast-2.rds.amazonaws.com:1521:orcl"/>
+		<property name="username" value="oracle"/>
+		<property name="password" value="oracle1234"/>
+	</bean>
+	
+	<!-- sqlSessionTemplate 등록 -->
+	<bean class="org.mybatis.spring.SqlSessionFactoryBean" id="factory">
+		<property name="dataSource" ref="ds"/>
+<!-- 		<property name="mapperLocations"> -->
+<!-- 			<list> -->
+<!-- 				<value>classpath:mappers/   </value> -->
+<!-- 			</list> -->
+<!-- 		</property> -->
+	</bean>
+	
+	<bean class="org.mybatis.spring.SqlSessionTemplate" id="template">
+		<constructor-arg name="sqlSessionFactory" ref="factory"/>
+	</bean>
+	
+	<!-- tx매니저 등록 -->
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="ds"/>
+	</bean>
+	<tx:advice id="tx" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="*"/>
+		</tx:attributes>
+	</tx:advice>
+	<aop:config>
+		<aop:advisor advice-ref="tx" pointcut="bean(*Service)"/>
+	</aop:config>
+	
+	<!-- gson 등록 -->
+	<bean id="gsonBuilder" class="com.google.gson.GsonBuilder">
+		<property name="dateFormat" value="yyyy/MM/dd HH:mm"></property>
+	</bean>
+	<bean id="gson" factory-bean="gsonBuilder" factory-method="create"/>
+	<!-- 이렇게 해두면 시간출력 custom된 gson을 주입받을 수 있음!!! 짱짱맨!! -->
+	
+</beans>
