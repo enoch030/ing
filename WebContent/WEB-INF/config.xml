@@ -33,11 +33,11 @@
 	<!-- sqlSessionTemplate 등록 -->
 	<bean class="org.mybatis.spring.SqlSessionFactoryBean" id="factory">
 		<property name="dataSource" ref="ds"/>
-<!-- 		<property name="mapperLocations"> -->
-<!-- 			<list> -->
-<!-- 				<value>classpath:mappers/   </value> -->
-<!-- 			</list> -->
-<!-- 		</property> -->
+		<property name="mapperLocations">
+			<list>
+				<value>/WEB-INF/mappers/*-mapper.xml </value>
+			</list>
+		</property>
 	</bean>
 	
 	<bean class="org.mybatis.spring.SqlSessionTemplate" id="template">
