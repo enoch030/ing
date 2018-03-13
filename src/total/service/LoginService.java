@@ -1,5 +1,8 @@
 package total.service;
 
-public class LoginService {
+import org.springframework.stereotype.Service;
 
+@Service
+public class LoginService {
+	
 }
