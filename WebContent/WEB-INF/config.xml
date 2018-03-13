@@ -5,7 +5,9 @@
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xsi:schemaLocation="http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket-4.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
@@ -13,7 +15,7 @@
 	<mvc:annotation-driven/>
 	<mvc:default-servlet-handler/>
 	
-	<!-- 어노테이션 (controller/service) 자동 등록 -->
+	<!-- 어노테이션 (controller/service) 자동 등록 : 그냥 total이라고만 해도 하위 패키지까지 다 스캔 됨. -->
 	<context:component-scan base-package="total.controller"/>
 	<context:component-scan base-package="total.service"/>
 	<!-- InternalResourceViewResolver로 경로 단순화 -->
@@ -63,5 +65,26 @@
 	</bean>
 	<bean id="gson" factory-bean="gsonBuilder" factory-method="create"/>
 	<!-- 이렇게 해두면 시간출력 custom된 gson을 주입받을 수 있음!!! 짱짱맨!! -->
+	
+	
+	<!-- mail sender setting : 쉽게 메일 송신할 수 있게 도와줌-->
+	<bean class="org.springframework.mail.javamail.JavaMailSenderImpl" id="mailSender">
+		<property name="host" value="smtp.gmail.com"/><!-- 서버 ip 대신 쓰는...? -->
+		<property name="username" value="mailSender030@gmail.com "/>
+		<property name="password" value="G@1q2w3e4r"/>
+		<property name="port" value="587"/>
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+			</props>
+		</property>
+	</bean>
+	
+	
+	<!-- WebSocket Handle setting -->
+	<websocket:handlers>
+		<!-- 빈 자동등록 시켰으므로 지정한 이름을 handler에. 수동 등록했다면 객체 ref적을 것. -->
+		<websocket:mapping handler="wsController" path="handle"/> 
+	</websocket:handlers>
 	
 </beans>

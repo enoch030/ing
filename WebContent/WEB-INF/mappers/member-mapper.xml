@@ -7,6 +7,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select * from member
 	</select>
 	
+	<select id="getMemberByIdmailAndPass" resultType="hashmap">
+		select * from member where (id = #{idmail} or email = #{idmail}) and pass = #{pass}
+	</select>
+		
+	<select id="getLvByIdmail" resultType="java.lang.Integer">
+		select lv from member where (id= #{idmail) or email = #{idmail})
+	</select>
+		
 	<insert id="putMember">
 		insert into member values (#{id}, #{email}, #{pass}, 0)
 	</insert>
