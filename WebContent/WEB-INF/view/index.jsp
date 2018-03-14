@@ -8,7 +8,6 @@
 	<c:otherwise>
 		${logon }님, 환영합니다!
 	</c:otherwise>
-</c:choose>	
-	
+</c:choose>
 	
 <%@ include file="/WEB-INF/layout/btm.jsp" %>

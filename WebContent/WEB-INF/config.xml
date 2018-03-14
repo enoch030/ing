@@ -5,11 +5,15 @@
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket-4.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
-		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.3.xsd">
 	<mvc:annotation-driven/>
 	<mvc:default-servlet-handler/>
 	
@@ -59,9 +63,22 @@
 	
 	<!-- gson 등록 -->
 	<bean id="gsonBuilder" class="com.google.gson.GsonBuilder">
-		<property name="dateFormat" value="yyyy/MM/dd HH:mm"></property>
+		<property name="dateFormat" value="yyyy/MM/dd HH:mm"/>
 	</bean>
+	
 	<bean id="gson" factory-bean="gsonBuilder" factory-method="create"/>
 	<!-- 이렇게 해두면 시간출력 custom된 gson을 주입받을 수 있음!!! 짱짱맨!! -->
+	
+	<!-- webSocket setting -->
+	<bean id="sessions" class="total.model.WebSocketMap"></bean>
+	<websocket:handlers>
+		<websocket:mapping handler="alertController" path="/alert"/>
+		<websocket:handshake-interceptors>
+		<!-- 웹소켓 연결 시도됐을 때 가로채서 작업하는 객체!
+				httpSession에 담겨있던 값을 고대로 담아서 옮겨줌! 만약 세션에 logon을 add해놨다면 그 값까지도!!!!	 -->
+			<bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"/>
+		</websocket:handshake-interceptors>
+	</websocket:handlers>
+
 	
 </beans>
