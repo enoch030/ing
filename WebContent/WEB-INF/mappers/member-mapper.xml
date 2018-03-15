@@ -3,16 +3,17 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="member">
+	
 	<insert id="addNewOne">
 		insert into member values(#{id},#{email},#{password}, 0)
 	</insert>
-	<select id="getById" resultType="hashmap">
-		select * from member where id=#{id}
+	
+	<select id="searchByIdmail" resultType="hashmap">
+		select * from member where  (id like #{idmail} or email like #{idmail})
 	</select>
-	<select id="getByEmail" resultType="hashmap">
-		select * from member where id=#{email}
+
+	<select id="getMemberByIdmailAndPass" resultType="hashmap">
+		select * from member where (id=#{idmail} or email=#{idmail}) and pass=#{pass}
 	</select>
-	<select id="getByIdmailAndPassword" resultType="hashmap">
-		select * from member where (id=#{idmail} or email=#{idmail}) and password=#{password}
-	</select>
+	
 </mapper>

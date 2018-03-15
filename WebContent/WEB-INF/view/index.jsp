@@ -6,7 +6,11 @@
 		<small>${ment }</small>
 	</c:when>
 	<c:otherwise>
-		${logon }님, 환영합니다!
+		<div style="width: 100%" align="left">
+			<div id="profile" style="width: 100px; border-style: solid;">
+			${logon }님, 환영합니다!
+			</div>
+		</div>
 	</c:otherwise>
 </c:choose>	
 	

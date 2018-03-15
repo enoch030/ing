@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import total.service.GreetService;
 
 @Controller
-public class indexController {
+public class IndexController {
 	@Autowired
 	GreetService greetService;
 	
